@@ -1,0 +1,19 @@
+{
+    "name": "zenit/mission",
+    "description": "Zenit Mission",
+    "keywords": [],
+    "license" : "MIT",
+    "authors" : [
+        {
+            "name": "Gergely Laborci",
+            "email": "gergely@laborci.hu"
+        }
+    ],
+    "require": {
+    },
+    "autoload": {
+        "psr-4": {
+            "Zenit\\Bundle\\Mission\\": "src/"
+        }
+    }
+}
