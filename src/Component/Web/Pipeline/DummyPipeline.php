@@ -1,4 +1,4 @@
-<?php namespace Zenit\Bundle\Mission\Module\Web\Pipeline;
+<?php namespace Zenit\Bundle\Mission\Component\Web\Pipeline;
 
 class DummyPipeline extends Pipeline {
 	public function __invoke() { }

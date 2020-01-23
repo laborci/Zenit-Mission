@@ -1,6 +1,6 @@
-<?php namespace Zenit\Bundle\Mission\Module\Web\Middleware;
+<?php namespace Zenit\Bundle\Mission\Component\Web\Middleware;
 
-use Zenit\Bundle\Mission\Module\Web\Pipeline\Middleware;
+use Zenit\Bundle\Mission\Component\Web\Pipeline\Middleware;
 
 class Measure extends Middleware {
 

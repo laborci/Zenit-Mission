@@ -1,7 +1,7 @@
-<?php namespace Zenit\Bundle\Mission\Module\Web\Routing;
+<?php namespace Zenit\Bundle\Mission\Component\Web\Routing;
 
-use Zenit\Bundle\Mission\Module\Web\Pipeline\DummyPipeline;
-use Zenit\Bundle\Mission\Module\Web\Pipeline\Pipeline;
+use Zenit\Bundle\Mission\Component\Web\Pipeline\DummyPipeline;
+use Zenit\Bundle\Mission\Component\Web\Pipeline\Pipeline;
 use Zenit\Core\ServiceManager\Component\Service;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -30,7 +30,7 @@ class Router{
 	public function pipe($responderClass, $arguments = []){ $this->pipeline[] = ['responderClass' => $responderClass, 'arguments' => $arguments,]; }
 
 	protected function route($method, $patterns, $responderClass = null, $arguments = []): Pipeline{
-		if ($this->request->isMethod($method)){
+		if ($method === '*' || $this->request->isMethod($method)){
 			$uri = rtrim($this->request->getPathInfo(), '/');
 			if (!$uri) $uri = '/';
 			if (!is_array($patterns)) $patterns = [$patterns];

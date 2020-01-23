@@ -1,4 +1,4 @@
-<?php namespace Zenit\Bundle\Mission\Module\Web\Pipeline;
+<?php namespace Zenit\Bundle\Mission\Component\Web\Pipeline;
 
 abstract class Middleware extends Segment {
 	final public function __invoke($method = 'run') {

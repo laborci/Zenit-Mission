@@ -20,7 +20,6 @@ class CliMission extends \Zenit\Bundle\Mission\Component\Mission{
 				$this->application->add(new $command());
 			}
 		}
-
 		$this->application->run();
 	}
 

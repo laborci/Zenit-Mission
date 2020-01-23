@@ -1,6 +1,6 @@
-<?php namespace Zenit\Bundle\Mission\Module\Web\Action;
+<?php namespace Zenit\Bundle\Mission\Component\Web\Action;
 
-use Zenit\Bundle\Mission\Module\Web\Responder\PageResponder;
+use Zenit\Bundle\Mission\Component\Web\Responder\PageResponder;
 
 class NotFound extends PageResponder {
 

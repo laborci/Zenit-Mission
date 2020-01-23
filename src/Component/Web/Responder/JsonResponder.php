@@ -1,11 +1,11 @@
-<?php namespace Zenit\Bundle\Mission\Module\Web\Responder;
+<?php namespace Zenit\Bundle\Mission\Component\Web\Responder;
 
-use Zenit\Bundle\Mission\Module\Web\Pipeline\Responder;
+use Zenit\Bundle\Mission\Component\Web\Pipeline\Responder;
 use Symfony\Component\HttpFoundation\ParameterBag;
 
 abstract class JsonResponder extends Responder {
 
-	final public function __invoke($method = 'respond') {
+	public function __invoke($method = 'respond') {
 		if (method_exists($this, 'shutDown')) {
 			register_shutdown_function([$this, 'shutDown']);
 		}

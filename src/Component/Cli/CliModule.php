@@ -7,7 +7,7 @@ use Zenit\Core\Event\Component\EventManager;
 use Zenit\Core\Module\Interfaces\ModuleInterface;
 use Zenit\Core\ServiceManager\Interfaces\SelfFactoryService;
 
-class CliModule extends Command implements ModuleInterface, SelfFactoryService{
+abstract class CliModule extends Command implements ModuleInterface, SelfFactoryService{
 
 	protected $config;
 

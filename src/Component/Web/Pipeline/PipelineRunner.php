@@ -1,4 +1,4 @@
-<?php namespace Zenit\Bundle\Mission\Module\Web\Pipeline;
+<?php namespace Zenit\Bundle\Mission\Component\Web\Pipeline;
 
 use Zenit\Core\ServiceManager\Component\ServiceContainer;
 use Symfony\Component\HttpFoundation\ParameterBag;

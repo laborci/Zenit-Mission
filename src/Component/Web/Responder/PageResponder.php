@@ -1,6 +1,6 @@
-<?php namespace Zenit\Bundle\Mission\Module\Web\Responder;
+<?php namespace Zenit\Bundle\Mission\Component\Web\Responder;
 
-use Zenit\Bundle\Mission\Module\Web\Pipeline\Responder;
+use Zenit\Bundle\Mission\Component\Web\Pipeline\Responder;
 
 abstract class PageResponder extends Responder {
 

@@ -1,4 +1,4 @@
-<?php namespace Zenit\Bundle\Mission\Module\Web\Pipeline;
+<?php namespace Zenit\Bundle\Mission\Component\Web\Pipeline;
 
 use Symfony\Component\HttpFoundation\FileBag;
 use Symfony\Component\HttpFoundation\HeaderBag;
@@ -22,7 +22,7 @@ abstract class Segment {
 		is_null($method) ? $this() : $this($method);
 	}
 
-	protected function next() { ($this->runner)(); }
+	protected function next($responderClass = null, $arguments = []) { ($this->runner)($responderClass, $arguments); }
 	protected function redirect($url = "/", $status = 302) { $this->break(Redirect::class, ['url' => $url, 'status' => $status]); }
 	protected function break($responderClass, $arguments = []) { ($this->runner)($responderClass, $arguments); }
 
@@ -43,5 +43,4 @@ abstract class Segment {
 	final protected function getServerBag(): ServerBag { return $this->getRequest()->server; }
 	final protected function getCookiesBag(): ParameterBag { return $this->getRequest()->cookies; }
 	final protected function getFileBag(): FileBag { return $this->getRequest()->files; }
-
 }

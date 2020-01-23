@@ -1,7 +1,8 @@
-<?php namespace Zenit\Bundle\Mission\Module\Web\Middleware;
+<?php namespace Zenit\Bundle\Mission\Component\Web\Middleware;
 
 use Zenit\Bundle\Cache\Component\FileCache;
-use Zenit\Bundle\Mission\Module\Web\Pipeline\Middleware;
+use Zenit\Bundle\Mission\Config;
+use Zenit\Bundle\Mission\Component\Web\Pipeline\Middleware;
 use Symfony\Component\HttpFoundation\Request;
 
 class Cache extends Middleware {
@@ -9,7 +10,7 @@ class Cache extends Middleware {
 	public function run(){
 		if($this->getRequest()->getMethod() !== Request::METHOD_GET) $this->next();
 		else{
-			$cache = new FileCache(env('web-responder.output-cache'));
+			$cache = new FileCache(Config::Service()->outputCache);
 			$cacheKey = crc32($this->getRequest()->getRequestUri());
 			if($cache->isValid($cacheKey)){
 				$this->setResponse(unserialize($cache->get($cacheKey)));
