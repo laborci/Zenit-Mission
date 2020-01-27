@@ -5,13 +5,13 @@ use Symfony\Component\HttpFoundation\ParameterBag;
 
 abstract class JsonResponder extends Responder {
 
-	public function __invoke($method = 'respond') {
+	final public function __invoke($method = 'respond') {
 		if (method_exists($this, 'shutDown')) {
 			register_shutdown_function([$this, 'shutDown']);
 		}
 		$response = $this->getResponse();
 		$response->headers->set('Content-Type', 'application/json');
-		$response->setContent(json_encode($this->$method(), JSON_UNESCAPED_UNICODE));
+		$response->setContent(json_encode($this->$method(...$this->getArgumentsBag()->all()), JSON_UNESCAPED_UNICODE));
 		$this->next();
 	}
 

@@ -1,35 +1,66 @@
 <?php namespace Zenit\Bundle\Mission\Component\Web\Routing;
 
 use CaseHelper\CaseHelperFactory;
+use Composer\Autoload\ClassLoader;
+use Minime\Annotations\Reader;
 use Zenit\Bundle\Mission\Component\Web\Pipeline\Segment;
 use Zenit\Bundle\Mission\Component\Web\Routing\Router;
+use Zenit\Core\CodeWriter\Component\CodeWriter;
+use Zenit\Core\ServiceManager\Component\ServiceContainer;
 
 class ApiManager extends Segment{
 
 	public static function setup(Router $router, $path, $namespace){
-		$router->any(rtrim($path, '/') . '/{path}', ApiManager::class, ['namespace' => $namespace])();
+		$router->any(rtrim($path, '/') . '/{path}', static::class, ['namespace' => $namespace])();
 	}
 
-	public function __invoke($method = null){
+	public function __invoke($m = null){
 
 		$namespace = $this->getArgumentsBag()->get('namespace');
-		$method = strtolower($this->getRequest()->getMethod());
-		$action = null;
+		$httpMethod = strtolower($this->getRequest()->getMethod());
+		$methodCandidate = null;
 		$uri = explode('/', $this->getPathBag()->get('path'));
+		$params = [];
+		$method = null;
+		$class = null;
 
-		if (preg_match('/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$/', end($uri)) === 0) $this->getPathBag()->set('id', array_pop($uri));
+		try{
+			do{
+				$classMap = array_map(function ($item){ return CaseHelperFactory::make(CaseHelperFactory::INPUT_TYPE_KEBAB_CASE)->toPascalCase($item); }, $uri);
+				$classCandidate = $namespace . '\\' . join('\\', $classMap);
+				$class = class_exists($classCandidate) ? $classCandidate : null;
+				if (!is_null($class)) break;
+				array_unshift($params, array_pop($uri));
+				$methodCandidate = lcfirst(array_pop($classMap));
+			}while (!empty($uri));
 
-		$uri = array_map(function ($item){ return CaseHelperFactory::make(CaseHelperFactory::INPUT_TYPE_KEBAB_CASE)->toPascalCase($item); }, $uri);
+			if (is_null($class)) throw new Exception('', 404);
 
-		$class = $namespace . '\\' . join('\\', $uri);
+			/** @var Reader $reader */
+			$reader = ServiceContainer::get(Reader::class);
+			$reflection = new \ReflectionClass($class);
 
-		if (class_exists($class)){
-			$this->next($class, ['method' => $method, 'action' => $action]);
-		}else{
-			$action = lcfirst(array_pop($uri));
-			$class = $namespace . '\\' . join('\\', $uri);
-			$this->next($class, ['method' => $method, 'action' => $action]);
+			if ($methodCandidate && $reflection->hasMethod($methodCandidate)){
+				$method = $reflection->getMethod($methodCandidate);
+				if ($reader->getAnnotations($method)->get('accepts') !== $httpMethod) throw new Exception('', 405);
+				array_shift($params);
+			}else{
+				$methods = $reflection->getMethods(\ReflectionMethod::IS_PUBLIC);
+				foreach ($methods as $method){
+					$method = $httpMethod === $reader->getAnnotations($method)->get('on') ? $method : null;
+					if (!is_null($method)) break;
+				}
+			}
+
+			if (is_null($method)) throw new Exception('', 404);
+			if (count($params) < $method->getNumberOfRequiredParameters()) throw new Exception('', 400);
+
+			$this->next([$class, $method->getName()], $params);
+
+		}catch (Exception $e){
+			$this->getResponse()->setStatusCode($e->getCode());
 		}
 	}
-
 }
+
+class Exception extends \Exception{}
