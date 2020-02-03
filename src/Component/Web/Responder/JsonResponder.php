@@ -11,7 +11,7 @@ abstract class JsonResponder extends Responder {
 		}
 		$response = $this->getResponse();
 		$response->headers->set('Content-Type', 'application/json');
-		$response->setContent(json_encode($this->$method(...$this->getArgumentsBag()->all()), JSON_UNESCAPED_UNICODE));
+		$response->setContent(json_encode($this->$method(...array_values($this->getArgumentsBag()->all())), JSON_UNESCAPED_UNICODE));
 		$this->next();
 	}
 

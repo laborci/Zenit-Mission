@@ -5,7 +5,6 @@ use Composer\Autoload\ClassLoader;
 use Minime\Annotations\Reader;
 use Zenit\Bundle\Mission\Component\Web\Pipeline\Segment;
 use Zenit\Bundle\Mission\Component\Web\Routing\Router;
-use Zenit\Core\CodeWriter\Component\CodeWriter;
 use Zenit\Core\ServiceManager\Component\ServiceContainer;
 
 class ApiManager extends Segment{
