@@ -14,7 +14,6 @@ class ApiManager extends Segment{
 	}
 
 	public function __invoke($m = null){
-
 		$namespace = $this->getArgumentsBag()->get('namespace');
 		$httpMethod = strtolower($this->getRequest()->getMethod());
 		$methodCandidate = null;

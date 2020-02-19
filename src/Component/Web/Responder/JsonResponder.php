@@ -5,7 +5,7 @@ use Symfony\Component\HttpFoundation\ParameterBag;
 
 abstract class JsonResponder extends Responder {
 
-	final public function __invoke($method = 'respond') {
+	public function __invoke($method = 'respond') {
 		if (method_exists($this, 'shutDown')) {
 			register_shutdown_function([$this, 'shutDown']);
 		}
@@ -23,5 +23,10 @@ abstract class JsonResponder extends Responder {
 		$data = json_decode($this->getRequest()->getContent(), true);
 		$data = is_array($data) ? $data : [];
 		return new ParameterBag($data);
+	}
+
+	protected function error($error){
+		$this->getResponse()->setStatusCode(400);
+		return ['error' => $error];
 	}
 }
