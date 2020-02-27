@@ -22,7 +22,7 @@ abstract class ApiJsonResponder extends JsonResponder{
 		if(!method_exists($this, $action) || ($methods && !in_array($method, $methods))){
 			$this->getResponse()->setStatusCode(404);
 		}else{
-			$response->setContent(json_encode($this->$action(), JSON_UNESCAPED_UNICODE));
+			$response->setContent(json_encode($this->$action(...$this->getArgumentsBag()->all()), JSON_UNESCAPED_UNICODE));
 			$this->next();
 		}
 	}

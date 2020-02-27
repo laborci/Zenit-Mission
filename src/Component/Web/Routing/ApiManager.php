@@ -52,7 +52,6 @@ class ApiManager extends Segment{
 
 			if (is_null($method)) throw new Exception('', 404);
 			if (count($params) < $method->getNumberOfRequiredParameters()) throw new Exception('', 400);
-
 			$this->next([$class, $method->getName()], $params);
 
 		}catch (Exception $e){
